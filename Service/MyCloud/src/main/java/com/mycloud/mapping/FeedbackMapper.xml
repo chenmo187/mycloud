@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mycloud.IDao.FeedbackMapper">
+
+	<insert id="createFeedback" useGeneratedKeys="true" keyProperty="id"
+		parameterType="com.mycloud.pojo.Feedback">
+		insert into tb_feedback (userid,
+		createtime,content,platform,version)
+		values
+		(#{userid,jdbcType=INTEGER},
+		now(),
+		#{content,jdbcType=VARCHAR},#{platform,jdbcType=VARCHAR},#{version,jdbcType=VARCHAR})
+	</insert>
+
+</mapper>

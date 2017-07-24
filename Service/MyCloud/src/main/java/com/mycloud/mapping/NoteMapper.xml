@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mycloud.IDao.NoteMapper">
+	<resultMap id="NoteFolderResultMap" type="com.mycloud.pojo.NoteFolder" />
+	<resultMap id="NoteResultMap" type="com.mycloud.pojo.Note" />
+
+
+	<select id="getNoteFolder" resultMap="NoteFolderResultMap"
+		parameterType="String">
+		select * from tb_note_folder where userid =
+		#{userid,jdbcType=INTEGER} and status != "2"
+	</select>
+
+	<select id="checkNoteFolderByName" resultMap="NoteFolderResultMap"
+		parameterType="map">
+		select * from tb_note_folder where userid =
+		#{userid,jdbcType=INTEGER} and folder = #{folder,jdbcType=VARCHAR}
+	</select>
+
+	<insert id="createNoteFolder" useGeneratedKeys="true"
+		keyProperty="id" parameterType="map">
+		insert into tb_note_folder (userid,
+		folder,createtime)
+		values
+		(#{userid,jdbcType=INTEGER},
+		#{folder,jdbcType=VARCHAR},now())
+	</insert>
+
+	<select id="checkNoteFolderById" resultMap="NoteFolderResultMap"
+		parameterType="map">
+		select * from tb_note_folder where userid =
+		#{userid,jdbcType=INTEGER} and id = #{folderid,jdbcType=INTEGER}
+	</select>
+
+	<select id="getNote" resultMap="NoteResultMap" parameterType="map">
+		select * from tb_note where userid =
+		#{userid,jdbcType=INTEGER} and
+		folderid = #{folderid,jdbcType=INTEGER} and status != "2"
+	</select>
+
+	<select id="checkNoteByName" resultMap="NoteResultMap"
+		parameterType="map">
+		select * from tb_note where userid =
+		#{userid,jdbcType=INTEGER} and
+		folderid = #{folderid,jdbcType=INTEGER}
+		and note =
+		#{note,jdbcType=VARCHAR}
+	</select>
+
+	<insert id="createNote" useGeneratedKeys="true" keyProperty="id"
+		parameterType="map">
+		<selectKey resultType="java.lang.Integer" order="AFTER"
+			keyProperty="id">
+			SELECT LAST_INSERT_ID() AS ID
+		</selectKey>
+		insert into tb_note (userid,
+		folderid,note,createtime)
+		values
+		(#{userid,jdbcType=INTEGER},
+		#{folderid,jdbcType=INTEGER},#{note,jdbcType=VARCHAR},now())
+	</insert>
+
+	<update id="updateNote" parameterType="map">
+		update tb_note set content
+		= #{content,jdbcType=VARCHAR},latestupdatetime =
+		now() where userid =
+		#{userid,jdbcType=INTEGER}
+		and id = #{noteid,jdbcType=VARCHAR}
+	</update>
+
+	<select id="getNoteById" resultMap="NoteResultMap"
+		parameterType="map">
+		select * from tb_note where userid =
+		#{userid,jdbcType=INTEGER} and id =
+		#{noteid,jdbcType=INTEGER}
+	</select>
+
+	<insert id="createNoteHistory" useGeneratedKeys="true"
+		keyProperty="id" parameterType="map">
+		insert into tb_note_history (noteid,
+		content,createtime)
+		values
+		(#{noteid,jdbcType=INTEGER},
+		#{content,jdbcType=VARCHAR},now())
+	</insert>
+
+	<update id="changeNoteFolderStatus" parameterType="map">
+		update
+		tb_note_folder set status
+		= #{status,jdbcType=INTEGER} where userid =
+		#{userid,jdbcType=INTEGER}
+		and id = #{folderid,jdbcType=INTEGER}
+	</update>
+
+	<update id="changeNoteStatus" parameterType="map">
+		update tb_note set
+		status
+		= #{status,jdbcType=INTEGER} where userid =
+		#{userid,jdbcType=INTEGER}
+		and id = #{noteid,jdbcType=INTEGER}
+	</update>
+
+	<select id="getShareNote" resultMap="NoteResultMap"
+		parameterType="String">
+		select note.id,note.folderid,note.note,note.content,note.createtime,note.latestupdatetime,user.nickname shareby 
+		from tb_note note left join  tb_user user on (note.userid = user.id)  where
+		share = "1" and status != "2"
+	</select>
+
+	<update id="shareNote" parameterType="map">
+		update
+		tb_note set share =
+		"1" where userid =
+		#{userid,jdbcType=INTEGER}
+		and id =
+		#{noteid,jdbcType=INTEGER}
+	</update>
+
+</mapper>

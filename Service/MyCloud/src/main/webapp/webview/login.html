@@ -1,0 +1,48 @@
+<html>
+<head>
+<script src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="js/toast.js"></script>
+<link rel="stylesheet" type="text/css" href="css/login.css">
+<meta charset="UTF-8">
+<title>云笔记</title>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#btn_login").click(function(){
+		 var phone = $("input[id='phone']").val();
+		 var pwd = $("input[id='pwd']").val();
+        
+           if(phone.length==0){
+           	new Toast({context:$("body"),message:"请输入手机号"}).show();
+           }else if(pwd.length==0){
+           		new Toast({context:$("body"),message:"请输入密码"}).show();
+           }else{
+
+           	$.ajax({
+            type: "POST",
+            url: "http://localhost:8080/mycloud/user/login",
+            data: "username="+phone+"&password="+pwd,
+            success: function(json){
+            
+              if(json.code == 200){
+              new Toast({context:$('body'),message:"登录成功"}).show();
+              window.location.href = "home.html";
+              }else{
+                new Toast({context:$('body'),message:json.msg}).show();
+             }
+           
+           }
+        });
+       
+       }
+	});
+});
+
+</script>
+</head>
+<body>
+<p id=head>登录</p>
+<input type:"text" id=phone placeholder="请输入手机号" maxlength=11 ></input>
+<input type:"text" id=pwd placeholder="请输入密码"></input>
+<button id=btn_login  type:"button" >登录</button>
+</body>
+</html>

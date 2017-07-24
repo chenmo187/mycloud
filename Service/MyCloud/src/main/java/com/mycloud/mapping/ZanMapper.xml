@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mycloud.IDao.ZanMapper">
+	<resultMap id="ZanResultMap" type="com.mycloud.pojo.Zan" />
+
+
+	<select id="checkZanNote" resultMap="ZanResultMap"
+		parameterType="map">
+		select * from tb_zan where userid =
+		#{userid,jdbcType=INTEGER} and noteid = #{noteid,jdbcType=INTEGER}
+	</select>
+
+	
+	<insert id="ZanNote" useGeneratedKeys="true"
+		keyProperty="id" parameterType="map">
+		insert into tb_zan (userid,
+		noteid,createtime)
+		values
+		(#{userid,jdbcType=INTEGER},
+		#{noteid,jdbcType=INTEGER},now())
+	</insert>
+
+</mapper>

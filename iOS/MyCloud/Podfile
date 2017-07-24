@@ -1,0 +1,10 @@
+platform :ios, '8.0'
+
+target 'MyCloud' do
+pod 'AFNetworking', '~> 3.0'
+pod 'MJExtension'
+pod 'MBProgressHUD', '~> 1.0.0'
+pod 'Toast', '~> 3.0'
+pod 'MJRefresh'
+
+end
